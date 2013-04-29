@@ -34,7 +34,7 @@ testing_extras = ['six',  # some zope.publisher versions miss to declare the dep
                   'komodo-python-dbgp==7.1.0']
 
 setup(name='pyramid_zope_request',
-      version='0.1dev',
+      version='0.1',
       description='Zope publisher request support for Pyramid',
       long_description=README + '\n\n' + CHANGES,
       classifiers=[
