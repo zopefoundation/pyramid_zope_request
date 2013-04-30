@@ -53,6 +53,12 @@ class PyramidPublisherResponse(object):
 
     addHeader = setHeader
 
+    def getStatus(self):
+        return self._response.status_code
+
+    def setStatus(self, status_code):
+        self._response.status_code = status_code
+
 
 # XXX: and again, just the bare minimum
 @zope.interface.implementer(zope.publisher.interfaces.browser.IBrowserRequest)

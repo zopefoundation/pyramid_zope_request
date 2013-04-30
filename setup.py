@@ -31,7 +31,8 @@ install_requires = [
 tests_require = install_requires
 
 testing_extras = ['six',  # some zope.publisher versions miss to declare the dep.
-                  ]
+                  'zope.browserpage',  # some z3c.form misses this
+                  'z3c.form [test]']
 
 setup(name='pyramid_zope_request',
       version='0.2.dev0',

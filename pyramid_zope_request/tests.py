@@ -60,6 +60,21 @@ class Test_PyramidPublisherResponse(unittest.TestCase):
         self.assertEqual(response.getHeader('Content-Type'),
                          'text/xml; charset=ascii')
 
+    def test_getstatus(self):
+        from pyramid.response import Response
+        response = self._callFUT(Response())
+        self.assertEqual(response.getStatus(), 200)
+        response = self._callFUT(Response(status=404))
+        self.assertEqual(response.getStatus(), 404)
+
+    def test_setstatus(self):
+        from pyramid.response import Response
+        response = self._callFUT(Response())
+
+        self.assertEqual(response.getStatus(), 200)
+        response.setStatus(404)
+        self.assertEqual(response.getStatus(), 404)
+
 
 class Test_PyramidPublisherRequest(unittest.TestCase):
     def setUp(self):
@@ -153,9 +168,7 @@ class Test_PyramidToPublisher(unittest.TestCase):
         from pyramid.request import Request
         request = Request(environ)
         request.registry = self.config.registry
-        from pyramid_zope_request import PyramidPublisherRequest
-        rv = PyramidPublisherRequest(request)
-        return rv
+        return request
 
     def test_wrap(self):
         environ = {
@@ -193,3 +206,95 @@ class Test_PyramidToPublisher(unittest.TestCase):
         self.assertEqual(len(ifaces), 1)
         self.assertEqual(ifaces[0].__name__, 'ITestLayer')
 
+
+class Test_z3cform(unittest.TestCase):
+    # this is the real deal
+    # render a z3c.form with a pyramid request
+    def setUp(self):
+        self.config = testing.setUp()
+        from z3c.form import testing as z3cform_testing
+        z3cform_testing.setUp(self)
+        z3cform_testing.setupFormDefaults()
+
+    def tearDown(self):
+        from z3c.form import testing as z3cform_testing
+        z3cform_testing.tearDown(self)
+        testing.tearDown()
+
+    def _getRequest(self, environ):
+        from pyramid.request import Request
+        request = Request(environ)
+        request.registry = self.config.registry
+        return request
+
+    def _getView(self):
+        import z3c.form.interfaces
+        from zope.publisher.interfaces.browser import IBrowserRequest
+        class IMyLayer(z3c.form.interfaces.IFormLayer, IBrowserRequest):
+            pass
+
+        import zope.schema
+        class IPerson(zope.interface.Interface):
+            name = zope.schema.TextLine(
+                    title=u'Name',
+                    required=True)
+
+        class Person(object):
+            zope.interface.implements(IPerson)
+            name = u''
+
+        import z3c.form.form
+        import z3c.form.field
+
+        from pyramid_zope_request import PyramidToPublisher
+
+        @PyramidToPublisher(IMyLayer)
+        class edit_person(z3c.form.form.Form):
+            fields = z3c.form.field.Fields(IPerson)
+
+        environ = {
+            'PATH_INFO': '/',
+            'SERVER_NAME': 'example.com',
+            'SERVER_PORT': '5432',
+            'wsgi.url_scheme': 'http',
+            }
+        request = self._getRequest(environ)
+
+        context = Person()
+        context.name = u'John Doe'
+
+        view = edit_person(context, request)
+
+        return view
+
+    def test_z3cform_call(self):
+        view = self._getView()
+        # render with __call__, there must be a ZPT template in place
+
+        import os
+        from zope.browserpage.viewpagetemplatefile import BoundPageTemplate
+        from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
+        from z3c.form import tests
+
+        view.template = BoundPageTemplate(
+            ViewPageTemplateFile('simple_edit.pt',
+                                 os.path.dirname(tests.__file__)), view)
+
+        result = view()
+        self.assertTrue("<!DOCTYPE html" in result)
+        self.assertTrue('id="form-widgets-name"' in result)
+        self.assertTrue('name="form.widgets.name"' in result)
+        self.assertTrue('value="John Doe"' in result)
+
+    def test_z3cform_update(self):
+        view = self._getView()
+        view.update()
+        # do not render by calling __call__, but render with a pyramid/chameleon
+        # template by using the view's attributes
+        self.assertEqual(view.action, "http://example.com:5432/")
+        self.assertEqual(view.status, "")
+
+        self.assertEqual(view.widgets['name'].name, 'form.widgets.name')
+        self.assertEqual(view.widgets['name'].label, 'Name')
+        self.assertEqual(view.widgets['name'].required, True)
+        self.assertEqual(view.widgets['name'].value, u'John Doe')
