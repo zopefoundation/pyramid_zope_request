@@ -124,9 +124,9 @@ class Test_PyramidPublisherRequest(unittest.TestCase):
             'wsgi.url_scheme': 'http',
             }
         request = self._callFUT(environ)
-        self.assertEqual(request.keys(),
-                         ['wsgi.url_scheme', 'webob._parsed_query_vars',
-                          'PATH_INFO', 'SERVER_PORT', 'SERVER_NAME'])
+        self.assertEqual(sorted(request.keys()),
+                         ['PATH_INFO', 'SERVER_NAME', 'SERVER_PORT',
+                          'webob._parsed_query_vars', 'wsgi.url_scheme'])
 
     def test_get(self):
         environ = {
