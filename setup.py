@@ -31,7 +31,7 @@ install_requires = [
 tests_require = install_requires
 
 testing_extras = ['six',  # some zope.publisher versions miss to declare the dep.
-                  'komodo-python-dbgp==7.1.0']
+                  ]
 
 setup(name='pyramid_zope_request',
       version='0.2.dev0',
