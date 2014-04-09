@@ -239,8 +239,8 @@ class Test_z3cform(unittest.TestCase):
                     title=u'Name',
                     required=True)
 
+        @zope.interface.implementer(IPerson)
         class Person(object):
-            zope.interface.implements(IPerson)
             name = u''
 
         import z3c.form.form
