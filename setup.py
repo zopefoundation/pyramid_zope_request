@@ -31,42 +31,48 @@ install_requires = [
 
 tests_require = install_requires
 
-testing_extras = ['six',  # some zope.publisher versions miss to declare the dep.
-                  'zope.browserpage',  # some z3c.form misses this
-                  'z3c.form [test]']
+testing_extras = [
+    'six',  # some zope.publisher versions miss to declare the dep.
+    'zope.browserpage',  # some z3c.form misses this
+    'z3c.form [test]',
+]
 
 setup(name='pyramid_zope_request',
       version='0.3.dev0',
       description='Zope publisher request support for Pyramid',
       long_description=README + '\n\n' + CHANGES,
       classifiers=[
-      "Intended Audience :: Developers",
-      "Programming Language :: Python",
-      "Programming Language :: Python :: 2",
-      "Programming Language :: Python :: 2.6",
-      "Programming Language :: Python :: 2.7",
-      "Programming Language :: Python :: 3",
-      "Programming Language :: Python :: 3.3",
-      "Programming Language :: Python :: Implementation :: CPython",
-      "Framework :: Pylons",
-      'Framework :: Zope :: 3',
-      "Topic :: Internet :: WWW/HTTP",
-      "Topic :: Internet :: WWW/HTTP :: WSGI",
-      'License :: OSI Approved :: Zope Public License',
+          "Intended Audience :: Developers",
+          "Programming Language :: Python",
+          "Programming Language :: Python :: 2",
+          "Programming Language :: Python :: 2.7",
+          "Programming Language :: Python :: 3",
+          "Programming Language :: Python :: 3.5",
+          "Programming Language :: Python :: 3.6",
+          "Programming Language :: Python :: 3.7",
+          "Programming Language :: Python :: 3.8",
+          "Programming Language :: Python :: 3.9",
+          "Programming Language :: Python :: Implementation :: CPython",
+          "Framework :: Pylons",
+          'Framework :: Zope :: 3',
+          "Topic :: Internet :: WWW/HTTP",
+          "Topic :: Internet :: WWW/HTTP :: WSGI",
+          'License :: OSI Approved :: Zope Public License',
       ],
       keywords='web wsgi pylons pyramid zope3 webob',
       author="Adam Groszer and the Zope Community",
       author_email="zope-dev@zope.org",
       url='http://pypi.python.org/pypi/pyramid_zope_request',
       license='ZPL 2.1',
-      packages=find_packages(),
+      packages=find_packages('src'),
+      package_dir={'': 'src'},
       include_package_data=True,
       zip_safe=False,
       install_requires=install_requires,
       tests_require=tests_require,
       test_suite="pyramid_zope_request",
       extras_require={
-          'testing': testing_extras,
+          'test': testing_extras,
       },
       entry_points="""
       """
