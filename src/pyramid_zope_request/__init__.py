@@ -33,7 +33,8 @@ class PyramidPublisherResponse(object):
         return getattr(self._response, name)
 
     def __setattr__(self, name, value):
-        # there are some attributes on Response that can be set, e.g. ``charset``
+        # there are some attributes on Response that can be set,
+        # e.g. ``charset``
         setattr(self._response, name, value)
 
     def getHeader(self, name):
@@ -100,7 +101,7 @@ class PyramidPublisherRequest(zope.publisher.base.BaseRequest):
         'See Interface.Common.Mapping.IEnumerableMapping'
         d = {}
         d.update(self.environment)
-        #d.update(self._cookies)
+        # d.update(self._cookies)
         d.update(self.form)
         return d.keys()
 
@@ -112,6 +113,7 @@ class PyramidPublisherRequest(zope.publisher.base.BaseRequest):
 class PyramidToPublisher(object):
     """View decorator that sets a skin on the request then wraps the request
     """
+
     def __init__(self, skin):
         self.skin = skin
 

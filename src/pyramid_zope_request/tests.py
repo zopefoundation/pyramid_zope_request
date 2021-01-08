@@ -95,20 +95,22 @@ class Test_PyramidPublisherRequest(unittest.TestCase):
         environ = {
             'PATH_INFO': '/',
             'REFERER': 'localhost'
-            }
+        }
         request = self._callFUT(environ)
         self.assertEqual(request.environment['REFERER'], 'localhost')
         self.assertEqual(request['REFERER'], 'localhost')
         self.assertEqual(request.annotations, {})
         self.assertEqual(request.debug.showTAL, False)
         self.assertEqual(request.debug.sourceAnnotations, False)
-        self.assertEqual(request.response.__class__.__name__, 'PyramidPublisherResponse')
+        self.assertEqual(request.response.__class__.__name__,
+                         'PyramidPublisherResponse')
 
     def test_convert_form(self):
         environ = {
             'PATH_INFO': '/',
-            'QUERY_STRING': 'lastName=Doe;country:list=Japan;country:list=Hungary',
-            }
+            'QUERY_STRING':
+                'lastName=Doe;country:list=Japan;country:list=Hungary',
+        }
         request = self._callFUT(environ)
         self.assertEqual(request.form,
                          {'country': ['Japan', 'Hungary'], 'lastName': 'Doe'})
@@ -117,7 +119,7 @@ class Test_PyramidPublisherRequest(unittest.TestCase):
         environ = {
             'PATH_INFO': '/',
             'HTTP_REFERER': 'localhost',
-            }
+        }
         request = self._callFUT(environ)
         self.assertEqual(request.referer, 'localhost')
 
@@ -127,7 +129,7 @@ class Test_PyramidPublisherRequest(unittest.TestCase):
             'SERVER_NAME': 'example.com',
             'SERVER_PORT': '5432',
             'wsgi.url_scheme': 'http',
-            }
+        }
         request = self._callFUT(environ)
         self.assertEqual(request.getURL(), 'http://example.com:5432/')
 
@@ -137,7 +139,7 @@ class Test_PyramidPublisherRequest(unittest.TestCase):
             'SERVER_NAME': 'example.com',
             'SERVER_PORT': '5432',
             'wsgi.url_scheme': 'http',
-            }
+        }
         request = self._callFUT(environ)
         self.assertEqual(sorted(request.keys()),
                          ['PATH_INFO', 'SERVER_NAME', 'SERVER_PORT',
@@ -148,9 +150,10 @@ class Test_PyramidPublisherRequest(unittest.TestCase):
             'PATH_INFO': '/',
             'SERVER_NAME': 'example.com',
             'SERVER_PORT': '5432',
-            'QUERY_STRING': 'lastName=Doe;country:list=Japan;country:list=Hungary',
+            'QUERY_STRING':
+                'lastName=Doe;country:list=Japan;country:list=Hungary',
             'wsgi.url_scheme': 'http',
-            }
+        }
         request = self._callFUT(environ)
         self.assertEqual(request.get('SERVER_NAME'), 'example.com')
         self.assertEqual(request.get('foobar'), None)
@@ -175,12 +178,14 @@ class Test_PyramidToPublisher(unittest.TestCase):
             'PATH_INFO': '/',
             'SERVER_NAME': 'example.com',
             'SERVER_PORT': '5432',
-            'QUERY_STRING': 'lastName=Doe;country:list=Japan;country:list=Hungary',
+            'QUERY_STRING':
+                'lastName=Doe;country:list=Japan;country:list=Hungary',
             'wsgi.url_scheme': 'http',
-            }
+        }
         req = self._getRequest(environ)
 
         from zope.publisher.interfaces.browser import IBrowserRequest
+
         class ITestLayer(IBrowserRequest):
             pass
 
@@ -201,8 +206,10 @@ class Test_PyramidToPublisher(unittest.TestCase):
         # check applied skin
         import zope.interface
         from zope.publisher.interfaces import ISkinType
-        ifaces = [iface for iface in zope.interface.directlyProvidedBy(view.request)
-                  if not ISkinType.providedBy(iface)]
+        ifaces = [
+            iface
+            for iface in zope.interface.directlyProvidedBy(view.request)
+            if not ISkinType.providedBy(iface)]
         self.assertEqual(len(ifaces), 1)
         self.assertEqual(ifaces[0].__name__, 'ITestLayer')
 
@@ -230,14 +237,16 @@ class Test_z3cform(unittest.TestCase):
     def _getView(self):
         import z3c.form.interfaces
         from zope.publisher.interfaces.browser import IBrowserRequest
+
         class IMyLayer(z3c.form.interfaces.IFormLayer, IBrowserRequest):
             pass
 
         import zope.schema
+
         class IPerson(zope.interface.Interface):
             name = zope.schema.TextLine(
-                    title=u'Name',
-                    required=True)
+                title=u'Name',
+                required=True)
 
         @zope.interface.implementer(IPerson)
         class Person(object):
@@ -257,7 +266,7 @@ class Test_z3cform(unittest.TestCase):
             'SERVER_NAME': 'example.com',
             'SERVER_PORT': '5432',
             'wsgi.url_scheme': 'http',
-            }
+        }
         request = self._getRequest(environ)
 
         context = Person()
@@ -289,8 +298,8 @@ class Test_z3cform(unittest.TestCase):
     def test_z3cform_update(self):
         view = self._getView()
         view.update()
-        # do not render by calling __call__, but render with a pyramid/chameleon
-        # template by using the view's attributes
+        # do not render by calling __call__, but render with a
+        # pyramid/chameleon template by using the view's attributes
         self.assertEqual(view.action, "http://example.com:5432/")
         self.assertEqual(view.status, "")
 
