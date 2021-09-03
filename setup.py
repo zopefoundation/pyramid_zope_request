@@ -27,6 +27,7 @@ install_requires = [
     'pyramid',
     'zope.interface',
     'zope.publisher',
+    'zope.testrunner',
 ]
 
 tests_require = install_requires
