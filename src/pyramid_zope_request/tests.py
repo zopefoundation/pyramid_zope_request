@@ -193,7 +193,7 @@ class Test_PyramidToPublisher(unittest.TestCase):
         from pyramid_zope_request import PyramidToPublisher
         wrapper = PyramidToPublisher(ITestLayer)
 
-        class View(object):
+        class View:
             def __init__(self, context, request):
                 self.context = context
                 self.request = request
@@ -246,12 +246,12 @@ class Test_z3cform(unittest.TestCase):
 
         class IPerson(zope.interface.Interface):
             name = zope.schema.TextLine(
-                title=u'Name',
+                title='Name',
                 required=True)
 
         @zope.interface.implementer(IPerson)
-        class Person(object):
-            name = u''
+        class Person:
+            name = ''
 
         import z3c.form.field
         import z3c.form.form
@@ -271,7 +271,7 @@ class Test_z3cform(unittest.TestCase):
         request = self._getRequest(environ)
 
         context = Person()
-        context.name = u'John Doe'
+        context.name = 'John Doe'
 
         view = edit_person(context, request)
 
@@ -308,4 +308,4 @@ class Test_z3cform(unittest.TestCase):
         self.assertEqual(view.widgets['name'].name, 'form.widgets.name')
         self.assertEqual(view.widgets['name'].label, 'Name')
         self.assertEqual(view.widgets['name'].required, True)
-        self.assertEqual(view.widgets['name'].value, u'John Doe')
+        self.assertEqual(view.widgets['name'].value, 'John Doe')

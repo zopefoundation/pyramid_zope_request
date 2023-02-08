@@ -22,7 +22,7 @@ import zope.publisher.skinnable
 # XXX: implementing just the bare minimum that gets e.g. z3c.form working
 #      feel free to add what's missing
 @zope.interface.implementer(zope.publisher.interfaces.IResponse)
-class PyramidPublisherResponse(object):
+class PyramidPublisherResponse:
 
     def __init__(self, response):
         # avoid direct attribute access, because of __setattr__
@@ -110,7 +110,7 @@ class PyramidPublisherRequest(zope.publisher.base.BaseRequest):
         return self.form.get(key, self.environment.get(key, default))
 
 
-class PyramidToPublisher(object):
+class PyramidToPublisher:
     """View decorator that sets a skin on the request then wraps the request
     """
 

@@ -35,7 +35,6 @@ install_requires = [
 tests_require = install_requires
 
 testing_extras = [
-    'six',  # some zope.publisher versions miss to declare the dep.
     'zope.browserpage',  # some z3c.form misses this
     'z3c.form [test]',
 ]
@@ -62,16 +61,15 @@ setup(name='pyramid_zope_request',
       ],
       keywords='web wsgi pylons pyramid zope3 webob',
       author="Adam Groszer and the Zope Community",
-      author_email="zope-dev@zope.org",
+      author_email="zope-dev@zope.dev",
       url='https://github.com/zopefoundation/pyramid_zope_request',
       license='ZPL 2.1',
       packages=find_packages('src'),
       package_dir={'': 'src'},
       include_package_data=True,
       zip_safe=False,
+      python_requires='>=3.7',
       install_requires=install_requires,
-      tests_require=tests_require,
-      test_suite="pyramid_zope_request",
       extras_require={
           'test': testing_extras,
       },
