@@ -1,4 +1,5 @@
 import unittest
+
 from pyramid import testing
 
 
@@ -252,8 +253,8 @@ class Test_z3cform(unittest.TestCase):
         class Person(object):
             name = u''
 
-        import z3c.form.form
         import z3c.form.field
+        import z3c.form.form
 
         from pyramid_zope_request import PyramidToPublisher
 
@@ -281,9 +282,10 @@ class Test_z3cform(unittest.TestCase):
         # render with __call__, there must be a ZPT template in place
 
         import os
+
+        from z3c.form import tests
         from zope.browserpage.viewpagetemplatefile import BoundPageTemplate
         from zope.browserpage.viewpagetemplatefile import ViewPageTemplateFile
-        from z3c.form import tests
 
         view.template = BoundPageTemplate(
             ViewPageTemplateFile('simple_edit.pt',

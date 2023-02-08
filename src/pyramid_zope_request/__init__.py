@@ -12,8 +12,8 @@
 #
 ##############################################################################
 import zope.interface
-import zope.publisher.interfaces.browser
 import zope.publisher.base
+import zope.publisher.interfaces.browser
 import zope.publisher.skinnable
 
 
