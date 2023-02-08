@@ -39,7 +39,7 @@ testing_extras = [
 ]
 
 setup(name='pyramid_zope_request',
-      version='0.3.dev0',
+      version='1.0.dev0',
       description='Zope publisher request support for Pyramid',
       long_description=README + '\n\n' + CHANGES,
       classifiers=[
